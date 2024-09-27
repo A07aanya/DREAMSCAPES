@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborative Dream Simulator</title>
+    <style>
+        canvas { width: 100%; height: 500px; }
+        #dream-input { width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Collaborative Dream Simulator</h1>
+    <textarea id="dream-input" placeholder="Describe your dream here..."></textarea>
+    <button id="submit-dream">Submit Dream</button>
+    <h2>Dream Elements:</h2>
+    <div id="dream-elements"></div>
+    <canvas id="terrain-canvas"></canvas>
+
+    <script src="https://threejs.org/build/three.min.js"></script>
+    <script src="static/script.js"></script>
+</body>
+</html>
