@@ -1,0 +1,42 @@
+document.getElementById('submit-dream').addEventListener('click', async () => {
+    const dreamInput = document.getElementById('dream-input').value;
+    
+    // Process dream input
+    const response = await fetch('/process_dream', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ dream: dreamInput }),
+    });
+
+    const data = await response.json();
+    document.getElementById('dream-elements').innerText = data.elements;
+
+    // Generate terrain
+    const terrainResponse = await fetch('/generate_terrain', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const terrainData = await terrainResponse.json();
+    drawTerrain(terrainData.terrain);
+});
+
+function drawTerrain(terrain) {
+    const canvas = document.getElementById('terrain-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 400;
+    canvas.height = 400;
+
+    for (let x = 0; x < terrain.length; x++) {
+        for (let y = 0; y < terrain[x].length; y++) {
+            const value = terrain[x][y];
+            const color = value > 0 ? 'green' : 'blue';
+            ctx.fillStyle = color;
+            ctx.fillRect(x * 4, y * 4, 4, 4); // Scale for visualization
+        }
+    }
+}
