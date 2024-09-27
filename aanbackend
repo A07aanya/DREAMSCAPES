@@ -1,0 +1,28 @@
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+
+class Dream(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    elements = db.Column(db.Text, nullable=False)
+
+class Dreamscape(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    dream_id = db.Column(db.Integer, db.ForeignKey('dream.id'), nullable=False)
+    landscape_data = db.Column(db.JSON, nullable=False)
+from flask_socketio import SocketIO, emit
+
+socketio = SocketIO(app)
+
+@socketio.on('join_dreamscape')
+def handle_join(data):
+    emit('user_joined', {'msg': f"{data['username']} has joined!"}, broadcast=True)
+
+if _name_ == '_main_':
+    socketio.run(app, debug=True)
