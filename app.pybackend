@@ -1,0 +1,36 @@
+from flask import Flask, request, jsonify, render_template
+import openai
+import numpy as np
+from noise import snoise2
+
+app = Flask(_name_)
+openai.api_key = 'YOUR_OPENAI_API_KEY'
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/process_dream', methods=['POST'])
+def process_dream():
+    dream_description = request.json['dream']
+    # Simulate dream processing
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": f"Extract main elements from the dream: {dream_description}"}]
+    )
+    dream_elements = response['choices'][0]['message']['content']
+    return jsonify({"elements": dream_elements})
+
+@app.route('/generate_terrain', methods=['POST'])
+def generate_terrain():
+    width, height, scale = 100, 100, 10
+    terrain = np.zeros((width, height))
+
+    for x in range(width):
+        for y in range(height):
+            terrain[x][y] = snoise2(x / scale, y / scale, octaves=6)
+
+    return jsonify({"terrain": terrain.tolist()})
+
+if _name_ == '_main_':
+    app.run(debug=True)
