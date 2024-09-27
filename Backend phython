@@ -1,0 +1,25 @@
+from flask import Flask, request, jsonify
+import openai
+
+app = Flask(_name_)
+
+# Initialize OpenAI
+openai.api_key = 'YOUR_API_KEY'
+
+@app.route('/process_dream', methods=['POST'])
+def process_dream():
+    dream_description = request.json['dream']
+    
+    # Extract elements using OpenAI
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[
+            {"role": "user", "content": f"Extract main elements from the dream: {dream_description}"}
+        ]
+    )
+    
+    dream_elements = response['choices'][0]['message']['content']
+    return jsonify({"elements": dream_elements})
+
+if _name_ == '_main_':
+    app.run(debug=True)
